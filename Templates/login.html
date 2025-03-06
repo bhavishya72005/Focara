@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login FOCARA</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-image:linear-gradient(blue,azure);
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 16px;
+        }
+        .form-container {
+            padding: 10px;
+            width: 100%;
+            max-width: 50%;
+            color: rgb(0, 0, 0);
+        }
+        h1 {
+            font-size: 20px;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 9px;
+            margin-bottom: 10px;
+            border: 1px solid #0a1fdc;
+            border-radius: 14px;
+        }
+        form{
+            width:60%;
+        }
+        button {
+            width: 100%;
+            padding: 8px;
+            background-color: #0000ff;
+            color: white;
+            border-radius: 24px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #ce3917;
+        }
+        p {
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .img-b {
+            display: block;
+            margin-left: 10%;
+            margin-right: auto;
+            width: 50%;
+            height: auto;
+        }
+        .submit{
+            margin-top:4%;
+            width:35%;
+        }
+        .logo{
+            height:420px;
+            width:420px;
+            object-fit: cover;
+            border-radius: 50%;
+            border-color: aqua;
+            border: 3px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="img-b">
+        <img src="{{ url_for('static', filename='webdf.jpg') }}" alt="Focara Logo" class="logo">
+    </div>
+    <div class="form-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+        <h1>Login to Focara</h1>
+        <form action="{{ url_for('login') }}" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button class="submit" type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></p>
+     </div>
+</body>
+</html>

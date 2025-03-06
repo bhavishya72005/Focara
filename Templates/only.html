@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Focara</title>
+</head>
+<body>
+    <div class="container">
+        <p>You are logged in as {{ session['username'] }}.</p>
+        <h1>Enter your study session time</h1>
+        <input type="number" id="study-time" placeholder="Study Time " required>
+        <h1>Enter YouTube Video Link</h1>
+        <form id="video-form">
+            <input type="url" id="youtube-link" placeholder="Paste YouTube link here" required>
+            <button class="button-f" type="submit">Start Study Session</button>
+        </form>
+        <div style="position: relative; width: 700px; height: 300px; overflow: hidden;">
+            <img src="{{ url_for('static', filename='delivery-banner-bg.png') }}" width="700" height="602" loading="lazy" alt="clouds" class="w-100">
+            <div class="overlay-text">
+                Rise above distractions, stay focused with Focara!
+            </div>
+        </div>
+        <div id="timer"></div>
+        <div id="video-container"></div>
+        <button class="button-f" id="stop-session" style="display:none;">Stop Session</button>
+        <div class="notepad-container">
+            <h2>Notepad</h2>
+            <textarea id="notepad" placeholder="Write your notes here..."></textarea>
+        </div>
+    </div>
+
+
+    <style>
+        .video-container, .notepad-container {
+            width: 48%;
+        }
+        #stop-session{
+            color:red;
+        }
+        .notepad-container {
+            width:max-content;
+            background: rgb(243, 251, 252);
+            border: 2px solid #000;
+            padding: 20px;
+            color: black;
+        }
+        .w-100
+        {
+             width: 100%;
+        }
+        h2 {
+            text-align: center;
+            color: #f54e42;
+        }
+        .overlay-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            justify-content:center;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            border: none;
+            outline: none;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 16px;
+            padding: 10px;
+        }
+        textarea:focus {
+            border: 1px solid #000;
+        }
+
+        #start-session, #stop-session {
+            background-color: #02fbe6;
+            color: white;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        #start-session:hover, #stop-session:hover {
+            background-color: #3db5ed;
+
+        }
+
+
+
+        .container{
+            text-align: center;
+            font-family: 'Times New Roman', Times, serif;
+            color:aliceblue;
+        }
+        #youtube-link{
+            border-radius: 23px;
+            border-color: rgb(12, 206, 223);
+        }
+        #study-time{
+            border-radius: 23px;
+            border-color: rgb(12, 206, 223);
+            padding:5px;
+        }
+        body{
+            display: flex;
+            justify-content: last baseline;
+            align-items: center;
+            background-image: linear-gradient(to right, rgb(137, 137, 236),rgb(51, 51, 234) ,rgb(255, 255, 255));
+        }
+        input[type="url"] {
+            width: 70%;
+            padding: 9px;
+            border: 1px solid #f1f1f1;
+            border-radius: 14px;
+        }
+        form{
+            margin-left: 20%;
+            padding-bottom:34px;
+            margin-bottom: 3%;
+        }
+
+        button {
+            width: 10%;
+            margin-left: 2%;
+            background-color: #11023b;
+            color: white;
+            border: none;
+            margin-top: 23px;
+            padding-right: 80px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+
+        }
+        #timer {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+
+    </style>
+    <script>
+        document.getElementById('video-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const link = document.getElementById('youtube-link').value;
+        const videoId = extractVideoId(link);
+
+        if (videoId) {
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&showinfo=0`;
+            document.getElementById('video-container').innerHTML = `<iframe width="560" height="315" src="${embedUrl}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+            startTimer();
+            document.getElementById('stop-session').style.display = 'block';  // Show the stop button
+            enterFullscreen(); // Enter fullscreen mode when starting the session
+        } else {
+            alert('Invalid YouTube link.');
+        }
+    });
+
+    document.getElementById('stop-session').addEventListener('click', function() {
+        stopSession();
+    });
+
+    function extractVideoId(url) {
+        const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
+
+    let interval;
+    function startTimer() {
+        let studyTime = parseInt(document.getElementById('study-time').value) * 3600;
+        const timerElement = document.getElementById('timer');
+        interval = setInterval(() => {
+            const hours = Math.floor(studyTime / 3600);
+            const minutes = Math.floor((studyTime % 3600) / 60);
+            const seconds = studyTime % 60;
+            timerElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+            if (studyTime > 0) {
+                studyTime--;
+            } else {
+                clearInterval(interval);
+                alert('Study session completed!');
+            }
+        }, 1000);
+    }
+
+    function stopSession() {
+        clearInterval(interval);
+        document.getElementById('timer').textContent = 'Session stopped';
+        document.getElementById('video-container').innerHTML = '';
+        document.getElementById('stop-session').style.display = 'none';  // Hide the stop button
+        exitFullscreen();
+    }
+
+    function enterFullscreen() {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => {
+                console.log(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else if (elem.mozRequestFullScreen) { // Firefox
+            elem.mozRequestFullScreen().catch(err => {
+                console.log(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+            elem.webkitRequestFullscreen().catch(err => {
+                console.log(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else if (elem.msRequestFullscreen) { // IE/Edge
+            elem.msRequestFullscreen().catch(err => {
+                console.log(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+            });
+        }
+    }
+
+    function exitFullscreen() {
+        if (document.exitFullscreen) {
+            document.exitFullscreen().catch(err => {
+                console.log(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else if (document.mozCancelFullScreen) { // Firefox
+            document.mozCancelFullScreen().catch(err => {
+                console.log(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else if (document.webkitExitFullscreen) { // Chrome, Safari, Opera
+            document.webkitExitFullscreen().catch(err => {
+                console.log(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        } else if (document.msExitFullscreen) { // IE/Edge
+            document.msExitFullscreen().catch(err => {
+                console.log(`Error attempting to exit fullscreen mode: ${err.message} (${err.name})`);
+            });
+        }
+    }
+
+    </script>
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+</body>
+</html>
