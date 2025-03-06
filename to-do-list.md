@@ -12,7 +12,6 @@
 ## 3. Feature Additions
 - [ ] Add a dark mode toggle
 - [ ] Implement a focus timer with sound alerts
-- [ ] Introduce a basic task tracker for study sessions
 
 ## 4. Backend Improvements
 - [ ] Integrate a database to store session history
