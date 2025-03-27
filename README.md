@@ -17,5 +17,5 @@ enabling users to maintain concentration and enhance their learning efficiency.
 ## 📦 Installation
 1. Clone the repository:
    ```sh
-   git clone https://github.com/your-username/focara.git
+   git clone https://github.com/bhavishya72005/focara.git
    cd focara
