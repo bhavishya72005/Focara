@@ -7,7 +7,7 @@
 </head>
 <body>
     <div class="container">
-        <p>You are logged in as {{ session['username'] }}.</p>
+        <h3><p>You are logged in as {{ session['username'] }}.</p></h3>
         <h1>Enter your study session time</h1>
         <input type="number" id="study-time" placeholder="Study Time " required>
         <h1>Enter YouTube Video Link</h1>
@@ -16,7 +16,7 @@
             <button class="button-f" type="submit">Start Study Session</button>
         </form>
         <div style="position: relative; width: 700px; height: 300px; overflow: hidden;">
-            <img src="{{ url_for('static', filename='delivery-banner-bg.png') }}" width="700" height="602" loading="lazy" alt="clouds" class="w-100">
+            <img src="{{ url_for('static', filename='delivery-banner-bg.png') }}" width="700" height="602" loading="clouds" alt="clouds" class="clouds-image">
             <div class="overlay-text">
                 Rise above distractions, stay focused with Focara!
             </div>
@@ -33,7 +33,10 @@
 
     <style>
         .video-container, .notepad-container {
-            width: 48%;
+            width: 50%;
+        }
+        p{
+            color:rgb(98, 0, 237)
         }
         #stop-session{
             color:red;
@@ -45,8 +48,15 @@
             padding: 20px;
             color: black;
         }
-        .w-100
+        h1{
+            color: rgb(68, 75, 145);
+
+        }
+        .clouds-image
         {
+            filter: contrast(110%)    /* Slightly more contrast */
+                    saturate(120%)    /* More vibrant colors */
+                    brightness(105%); /* Slightly brighter */
              width: 100%;
         }
         h2 {
@@ -59,7 +69,7 @@
             left: 50%;
             justify-content:center;
             transform: translate(-50%, -50%);
-            color: white;
+            color: rgba(7,20,23);
             font-size: 1.5rem;
             font-weight: bold;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
@@ -92,11 +102,9 @@
             width: 100%;
         }
         #start-session:hover, #stop-session:hover {
-            background-color: #3db5ed;
+            background-color: #E6E6FA;
 
         }
-
-
 
         .container{
             text-align: center;
@@ -116,14 +124,19 @@
             display: flex;
             justify-content: last baseline;
             align-items: center;
-            background-image: linear-gradient(to right, rgb(137, 137, 236),rgb(51, 51, 234) ,rgb(255, 255, 255));
-        }
-        input[type="url"] {
-            width: 70%;
-            padding: 9px;
-            border: 1px solid #f1f1f1;
-            border-radius: 14px;
-        }
+            background-image: linear-gradient(
+                to right,
+                rgba(173, 216, 230, 0.8) 0%,       /* Light blue, soft */
+                rgba(173, 216, 230, 0.8) 10%,      /* Keep light blue until 10% */
+                rgba(230, 230, 250, 0.85) 50%,     /* Lavender until 50% */
+                rgba(145, 123, 139, 0.9) 100%      /* Antique lavender shade */
+            );
+            input[type="url"] {
+                width: 70%;
+                padding: 9px;
+                border: 1px solid #f1f1f1;
+                border-radius: 14px;
+            }
         form{
             margin-left: 20%;
             padding-bottom:34px;
