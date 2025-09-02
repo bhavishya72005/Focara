@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login FOCARA</title>
+    <title >Login FOCARA</title>
     <style>
         body {
             font-family: sans-serif;
@@ -34,6 +34,19 @@
         }
         form{
             width:60%;
+        }
+        .gradient-text {
+            background: linear-gradient(
+                to right,
+                #0f07eb 10%,
+                #00ffee 15%,
+                #fa2e00 40%,
+                #ed7358 10%,
+                white 100
+            );
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text; /* For Firefox */
         }
         button {
             width: 100%;
@@ -73,7 +86,11 @@
             border-color: aqua;
             border: 3px;
         }
+        h1
+        {
+            font-size:45px;
 
+        }
     </style>
 </head>
 <body>
@@ -90,7 +107,7 @@
                 </ul>
             {% endif %}
         {% endwith %}
-        <h1>Login to Focara</h1>
+        <h1 class="gradient-text">Login to Focara</h1>
         <form action="{{ url_for('login') }}" method="POST">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
